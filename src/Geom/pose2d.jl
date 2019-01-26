@@ -16,6 +16,10 @@ struct Pose2D{T<:SE2}
     aff = AffineMap(Angle2d{dtype}(aff.linear), SVector{2,dtype}(aff.translation))
     new{typeof(aff)}(aff)
   end
+  function Pose2D(statev::SVector{3, T}) where T<:Real
+    x, y, theta = statev
+    Pose2D(T, x, y, theta)
+  end
 end
 function Pose2D(aff::SE2{L, T}) where L where T
   C = promote_type(eltype(L), eltype(T))
@@ -46,6 +50,7 @@ function world2body(T_WP::Pose2D, T_WB::Pose2D)
   return Pose2D(inv(T_WB.affine) ∘ T_WP.affine)
 end
 
+# TODO(cxs): add setters
 function Base.setproperty!(p::Pose2D, s::Symbol, val)
   if s === :theta
     p.affine.linear.theta = val
