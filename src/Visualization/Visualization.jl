@@ -47,10 +47,9 @@ function addpoints!(s::Scene, initdata::Vector{SVector{2, T}}; kwargs...) where 
     return points
 end
 
-function createviz(map::Matrix; scale=2)
+function createviz(map::Matrix; scale)
     h, w = size(map)
-    #scene = Scene(scale_plot=false, resolution=(scale*h, scale*w))
-    scene=Scene()
+    scene=Scene(scale=scale)
     display(scene)
     # because of how makie plots
     plotmap = reverse(map', dims=2)

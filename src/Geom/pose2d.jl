@@ -3,14 +3,13 @@ import CoordinateTransformations: compose
 using LinearAlgebra
 import Distributions, Statistics
 
-#const T3D = Union{SVector{3}, Translation{3}}
 const T2D = Union{SVector{2}, Translation{2}}
 const R2D = Rotation{2}
 const SE2{L, T} = AffineMap{L,T} where L <: R2D where T <: T2D
+
 const T3D = Union{SVector{3}, Translation{3}}
 const R3D = Rotation{3}
 const SE3{L, T} = AffineMap{L,T} where L <: R3D where T <: T3D
-
 
 @inline project2D(r::R3D) = Angle2d(RotXYZ(r).theta3)
 @inline project2D(t::T3D) = SVector(t[1], t[2])
@@ -40,6 +39,7 @@ struct Pose2D{T}
     #end
   end
 end
+# TODO: varargs might be slow, benchmark
 @inline Pose2D(args...) = Pose2D{Float64}(args...) # default to Float64
 
 # TODO(cxs): add warning if composing with non-SE2 type?
@@ -61,7 +61,6 @@ end
     elseif s === :theta
       return getfield(p, :affine).linear.theta
     elseif s === :posv
-      #todo this should always be length 2
       return SVector{2,T}(getfield(p, :affine).translation[1:2])
     elseif s === :statev
       th = getfield(p, :affine).linear.theta
@@ -109,7 +108,7 @@ end
 #TODO: check type stabil on Type param
 #@inline Scale3D(t::Type, sx, sy, sz) = LinearMap(SMatrix{3,3,t}(sx,0,0,0,sy,0,0,0,sz))
 #@inline Scale3D(sx, sy, sz) = Scale3D(Float64, sx, sy, sz)
-@inline Scale2D(t::Type, s) = LinearMap(SMatrix{2,2,t}(s,0,0,s))
+@inline Scale2D(t, s) = LinearMap(SMatrix{2,2,t}(s,0,0,s))
 @inline Scale2D(s) = Scale2D(Float64, s)
 
 Statistics.mean(p::AbstractVector{<:Pose2D}) = mean(p)
