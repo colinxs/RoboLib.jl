@@ -6,14 +6,6 @@ git-tree-sha1 = "8d59c3b1463b5e0ad05a3698167f85fac90e184d"
 uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
 version = "0.3.2"
 
-[[AbstractPlotting]]
-deps = ["ColorBrewer", "ColorTypes", "Colors", "Contour", "FileIO", "FixedPointNumbers", "FreeType", "FreeTypeAbstraction", "GeometryTypes", "ImageMagick", "IntervalSets", "LinearAlgebra", "Markdown", "Observables", "Packing", "PlotUtils", "Printf", "Random", "Serialization", "Showoff", "SignedDistanceFields", "StaticArrays", "Statistics", "UnicodeFun"]
-git-tree-sha1 = "0311ee98ef7a401723f569ef7e27ba8bed1c1713"
-repo-rev = "master"
-repo-url = "https://github.com/JuliaPlots/AbstractPlotting.jl.git"
-uuid = "537997a7-5e4e-5d89-9595-2241ea00577e"
-version = "0.9.3"
-
 [[Adapt]]
 deps = ["LinearAlgebra", "Test"]
 git-tree-sha1 = "53d8fec4f662088c1202530e338a11a919407f3b"
@@ -53,18 +45,6 @@ git-tree-sha1 = "055eb2690182ebc31087859c3dd8598371d3ef9e"
 uuid = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 version = "0.5.3"
 
-[[CMake]]
-deps = ["BinDeps", "Libdl", "Test"]
-git-tree-sha1 = "6e39bef3cbb8321e8a464b18a5c20d7cef813938"
-uuid = "631607c0-34d2-5d66-819e-eb0f9aa2061a"
-version = "1.1.1"
-
-[[CMakeWrapper]]
-deps = ["BinDeps", "CMake", "Libdl", "Parameters", "Test"]
-git-tree-sha1 = "2b43d451639984e3571951cc687b8509b0a86c6d"
-uuid = "d5fb7624-851a-54ee-a528-d3f3bac0b4a0"
-version = "0.2.2"
-
 [[CUDAapi]]
 deps = ["Libdl", "Logging", "Test"]
 git-tree-sha1 = "350cde12f25d297609369a9acb4c6214211675db"
@@ -88,12 +68,6 @@ deps = ["CustomUnitRanges", "OffsetArrays", "Test"]
 git-tree-sha1 = "254cf73ea369d2e39bfd6c5eb27a2296cfaed68c"
 uuid = "aafaddc9-749c-510e-ac4f-586e18779b91"
 version = "0.2.0"
-
-[[ColorBrewer]]
-deps = ["Colors", "JSON", "Test"]
-git-tree-sha1 = "61c5334f33d91e570e1d0c3eb5465835242582c4"
-uuid = "a2cac450-b92f-5266-8821-25eda20663c8"
-version = "0.4.0"
 
 [[ColorTypes]]
 deps = ["FixedPointNumbers", "Random", "Test"]
@@ -136,12 +110,6 @@ deps = ["Compat", "JSON", "VersionParsing"]
 git-tree-sha1 = "b625d802587c2150c279a40a646fba63f9bd8187"
 uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 version = "1.2.0"
-
-[[Contour]]
-deps = ["LinearAlgebra", "StaticArrays", "Test"]
-git-tree-sha1 = "b974e164358fea753ef853ce7bad97afec15bb80"
-uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
-version = "0.5.1"
 
 [[CoordinateTransformations]]
 deps = ["Compat", "Rotations", "StaticArrays"]
@@ -239,55 +207,17 @@ git-tree-sha1 = "e393bd3b9102659fb24fe88caedec41f2bc2e7de"
 uuid = "f6369f11-7733-5829-9624-2563aa707210"
 version = "0.10.2"
 
-[[FreeType]]
-deps = ["BinaryProvider", "Libdl", "Pkg", "Test"]
-git-tree-sha1 = "06462b9d5aca708d764d16e5ba6a83ba7b753d57"
-uuid = "b38be410-82b0-50bf-ab77-7b57e271db43"
-version = "2.1.1"
-
-[[FreeTypeAbstraction]]
-deps = ["ColorVectorSpace", "Colors", "FreeType", "StaticArrays", "Test"]
-git-tree-sha1 = "0128f0469d0ccb97cfaed51e39795ecfac073eb7"
-uuid = "663a7486-cb36-511b-a19d-713bb74d65c9"
-version = "0.4.2"
-
-[[GLFW]]
-deps = ["BinDeps", "CMakeWrapper", "Homebrew", "Libdl", "Test"]
-git-tree-sha1 = "035e2b5e9c335afae1e92ecfe532cf0620da869f"
-uuid = "f7f18e0c-5ee9-5ccd-a5bf-e8befd85ed98"
-version = "2.3.0"
-
-[[GLMakie]]
-deps = ["AbstractPlotting", "AxisArrays", "ColorTypes", "ColorVectorSpace", "Colors", "FileIO", "FixedPointNumbers", "FreeType", "FreeTypeAbstraction", "GLFW", "GeometryTypes", "ImageAxes", "ImageCore", "ImageFiltering", "ImageMagick", "ImageTransformations", "IndirectArrays", "IntervalSets", "IterTools", "LinearAlgebra", "Markdown", "MeshIO", "ModernGL", "Observables", "Printf", "Serialization", "StaticArrays"]
-git-tree-sha1 = "af72a331bfb02fc109a538099b2ccb49ffd677c0"
-repo-rev = "master"
-repo-url = "https://github.com/JuliaPlots/GLMakie.jl.git"
-uuid = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
-version = "0.0.4"
-
 [[GPUArrays]]
 deps = ["Adapt", "FFTW", "FillArrays", "LinearAlgebra", "Printf", "Random", "Serialization", "StaticArrays", "Test"]
 git-tree-sha1 = "2b96d7f25fbea82c08a736d78cbf14df8d2100a5"
 uuid = "0c68f7d7-f131-5f86-a1c3-88cf8149b2d7"
 version = "0.6.1"
 
-[[GeometryTypes]]
-deps = ["ColorTypes", "FixedPointNumbers", "IterTools", "LinearAlgebra", "StaticArrays", "Test"]
-git-tree-sha1 = "28b193e14466beecf928449e0f8505ff6de3709d"
-uuid = "4d00f742-c7ba-57c2-abde-4428a4b178cb"
-version = "0.7.2"
-
 [[Graphics]]
 deps = ["Colors", "Compat", "NaNMath"]
 git-tree-sha1 = "e3ead4211073d4117a0d2ef7d1efc5c8092c8412"
 uuid = "a2bd30eb-e257-5431-a919-1863eab51364"
 version = "0.4.0"
-
-[[Homebrew]]
-deps = ["BinDeps", "InteractiveUtils", "JSON", "Libdl", "Test", "Unicode"]
-git-tree-sha1 = "f01fb2f34675f9839d55ba7238bab63ebd2e531e"
-uuid = "d9be37ee-ecc9-5288-90f1-b9ca67657a75"
-version = "0.7.1"
 
 [[IdentityRanges]]
 deps = ["OffsetArrays", "Test"]
@@ -318,12 +248,6 @@ deps = ["CatIndices", "ColorVectorSpace", "Colors", "ComputationalResources", "D
 git-tree-sha1 = "964ceed5de3c0a7e352cf0e4df2f2a8e628ae00c"
 uuid = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 version = "0.5.3"
-
-[[ImageMagick]]
-deps = ["BinaryProvider", "ColorTypes", "FileIO", "FixedPointNumbers", "ImageCore", "InteractiveUtils", "Libdl", "Pkg", "Random", "Test"]
-git-tree-sha1 = "0e4cc77fb131061b3525a97fd7d483b253c3aaad"
-uuid = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
-version = "0.7.1"
 
 [[ImageMetadata]]
 deps = ["AxisArrays", "ColorVectorSpace", "Colors", "Dates", "FixedPointNumbers", "ImageAxes", "ImageCore", "IndirectArrays", "Statistics", "Test"]
@@ -414,14 +338,6 @@ git-tree-sha1 = "c443e1c8d58a4e9f61b708ad0a88286c7042145b"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 version = "0.4.4"
 
-[[Makie]]
-deps = ["AbstractPlotting", "FileIO", "GLMakie", "ImageMagick", "Pkg", "QuartzImageIO"]
-git-tree-sha1 = "92f781e7d21ed40cad3b2c98a181558c3887a773"
-repo-rev = "master"
-repo-url = "https://github.com/JuliaPlots/Makie.jl.git"
-uuid = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
-version = "0.9.1"
-
 [[MappedArrays]]
 deps = ["Test"]
 git-tree-sha1 = "923441c5ac942b60bd3a842d5377d96646bcbf46"
@@ -432,12 +348,6 @@ version = "0.2.1"
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[MeshIO]]
-deps = ["ColorTypes", "FileIO", "GeometryTypes", "Printf", "Test"]
-git-tree-sha1 = "3e01e12c4c626578a9d47fac0d15c9fe8dad5139"
-uuid = "7269a6da-0436-5bbc-96c2-40638cbb6118"
-version = "0.3.1"
-
 [[Missings]]
 deps = ["Dates", "InteractiveUtils", "SparseArrays", "Test"]
 git-tree-sha1 = "d1d2585677f2bd93a97cfeb8faa7a0de0f982042"
@@ -446,12 +356,6 @@ version = "0.4.0"
 
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
-
-[[ModernGL]]
-deps = ["Libdl"]
-git-tree-sha1 = "f4f8fa8d04d3c1e7294f07fc37586c819466ad38"
-uuid = "66fc600b-dfda-50eb-8b99-91cfa97b1301"
-version = "1.0.0"
 
 [[NNlib]]
 deps = ["Libdl", "LinearAlgebra", "MacroTools", "Requires", "Test"]
@@ -464,12 +368,6 @@ deps = ["Compat"]
 git-tree-sha1 = "ce3b85e484a5d4c71dd5316215069311135fa9f2"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "0.3.2"
-
-[[Observables]]
-deps = ["Test"]
-git-tree-sha1 = "dc02cec22747d1d10d9f70d8a1c03432b5bfbcd0"
-uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
-version = "0.2.3"
 
 [[OffsetArrays]]
 deps = ["DelimitedFiles", "Test"]
@@ -489,33 +387,15 @@ git-tree-sha1 = "b6c91fc0ab970c0563cbbe69af18d741a49ce551"
 uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
 version = "0.9.6"
 
-[[Packing]]
-deps = ["GeometryTypes", "Test"]
-git-tree-sha1 = "bc7c284233cf0518933bf9977e3e8234efcc1c30"
-uuid = "19eb6ba3-879d-56ad-ad62-d5c202156566"
-version = "0.3.0"
-
 [[PaddedViews]]
 deps = ["OffsetArrays", "Test"]
 git-tree-sha1 = "7da3e7e1a58cffbf10177553ae95f17b92516912"
 uuid = "5432bcbf-9aad-5242-b902-cca2824c8663"
 version = "0.4.2"
 
-[[Parameters]]
-deps = ["Markdown", "OrderedCollections", "REPL", "Test"]
-git-tree-sha1 = "70bdbfb2bceabb15345c0b54be4544813b3444e4"
-uuid = "d96e819e-fc66-5662-9728-84c9c7592b0a"
-version = "0.10.3"
-
 [[Pkg]]
 deps = ["Dates", "LibGit2", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-
-[[PlotUtils]]
-deps = ["Colors", "Dates", "Printf", "Random", "Reexport", "Test"]
-git-tree-sha1 = "fd28f30a294a38ec847de95d8ac7ac916ccd7c06"
-uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "0.5.5"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -532,12 +412,6 @@ deps = ["DataStructures", "LinearAlgebra", "Test"]
 git-tree-sha1 = "3ce467a8e76c6030d4c3786e7d3a73442017cdc0"
 uuid = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
 version = "2.0.3"
-
-[[QuartzImageIO]]
-deps = ["ColorTypes", "ColorVectorSpace", "FileIO", "FixedPointNumbers", "ImageCore", "Libdl", "Random", "Test"]
-git-tree-sha1 = "33dccde77cddfbbf3fe9dbf3b92d2459260368fa"
-uuid = "dca85d43-d64c-5e67-8c65-017450d5d020"
-version = "0.5.2"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
@@ -600,18 +474,6 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 [[SharedArrays]]
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
-
-[[Showoff]]
-deps = ["Compat"]
-git-tree-sha1 = "276b24f3ace98bec911be7ff2928d497dc759085"
-uuid = "992d4aef-0814-514b-bc4d-f2e9a6c4116f"
-version = "0.2.1"
-
-[[SignedDistanceFields]]
-deps = ["Random", "Statistics", "Test"]
-git-tree-sha1 = "d263a08ec505853a5ff1c1ebde2070419e3f28e9"
-uuid = "73760f76-fbc4-59ce-8f25-708e95d2df96"
-version = "0.4.0"
 
 [[SimpleTraits]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
@@ -692,12 +554,6 @@ uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
-
-[[UnicodeFun]]
-deps = ["Test"]
-git-tree-sha1 = "63cbbd00217fc9aafedf055b60459c1ae7e01ecc"
-uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
-version = "0.4.0"
 
 [[VersionParsing]]
 deps = ["Compat"]
