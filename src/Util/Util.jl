@@ -50,5 +50,6 @@ end
 takeN(a::AbstractArray, n::Integer) = @inbounds (a[round(Int,i)] for i in LinRange(firstindex(a), lastindex(a), n))
 
 include("cuda.jl")
+include("circularchannel.jl")
 
 end # module
