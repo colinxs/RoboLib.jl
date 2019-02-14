@@ -92,8 +92,7 @@ using Test
         @test iszero(out1)
         @test iszero(out2)
         put!(cb, inputs[3])
-        sleep(2)
-        println(out1, out2)
+        sleep(0.5)
         @test out1 == inputs[3]
         @test out2 == inputs[3]
 

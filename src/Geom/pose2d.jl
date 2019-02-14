@@ -108,7 +108,7 @@ end
 #TODO: check type stabil on Type param
 #@inline Scale3D(t::Type, sx, sy, sz) = LinearMap(SMatrix{3,3,t}(sx,0,0,0,sy,0,0,0,sz))
 #@inline Scale3D(sx, sy, sz) = Scale3D(Float64, sx, sy, sz)
-@inline Scale2D(t, s) = LinearMap(SMatrix{2,2,t}(s,0,0,s))
+@inline Scale2D(t, s) = SMatrix{2,2,t}(s,0,0,s)
 @inline Scale2D(s) = Scale2D(Float64, s)
 
 Statistics.mean(p::AbstractVector{<:Pose2D}) = mean(p)

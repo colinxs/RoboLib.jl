@@ -46,3 +46,16 @@ end
 
 # subsample TODO(cxs): allow for arbitrary axis
 takeN(a::AbstractArray, n::Integer) = @inbounds (a[round(Int,i)] for i in LinRange(firstindex(a), lastindex(a), n))
+
+tuplecat(t1::Tuple, t2::Tuple, t3...) = tuplecat((t1..., t2...), t3...)
+tuplecat(t::Tuple) = t
+
+# run func while redirecting it's stdout to /dev/null
+# works only on POSIX systems
+macro squashstdout(func)
+    quote
+        open("/dev/null", "w") do io
+            redirect_stdout($(esc(func)), io)
+        end
+    end
+end

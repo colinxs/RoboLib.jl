@@ -61,7 +61,7 @@ end
     end
     cb.arr[cb.col..., _arr_index(cb, cb.length)] = data
     notify(cb.cond_take, nothing, true, false)
-    cb
+    nothing
 end
 
 @inline Base.@propagate_inbounds function Base.take!(cb::CircularArray, out::AbstractArray)
@@ -70,6 +70,7 @@ end
     cb.length -= 1
     nothing
 end
+
 @inline Base.@propagate_inbounds function Base.take!(cb::CircularArray)
     v = fetch(cb)
     cb.first = ifelse(cb.first + 1 > cb.capacity, 1, cb.first + 1)
@@ -92,11 +93,11 @@ end
     copyto!(out, view(cb.arr, cb.col..., cb.first))
     nothing
 end
+
 @inline Base.wait(cb::CircularArray) = while isempty(cb) wait(cb.cond_take) end
 @inline Base.isready(cb::CircularArray) = !isempty(cb)
 @inline Base.length(cb::CircularArray) = cb.length
 @inline Base.size(cb::CircularArray) = (length(cb),)
-#@inline Base.convert(::Type{Array}, cb::CircularArray{T}) where {T} = T[x for x in cb]
-@inline Base.isempty(cb::CircularArray) = cb.length == 0
+@inline Base.isempty(cb::CircularArray) = iszero(cb.length)
 @inline capacity(cb::CircularArray) = cb.capacity
 @inline isfull(cb::CircularArray) = length(cb) == cb.capacity
