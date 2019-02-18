@@ -59,3 +59,27 @@ macro squashstdout(func)
         end
     end
 end
+
+# --- Tables.jl interface for vector-of-structs
+using Tables
+_getrow(x, i, fields) = NamedTuple{fields}(Tuple(getfield(x[i], f) for f in fields))
+
+struct VecOfStructSource{NT, A<:AbstractArray}
+    arr::A
+end
+
+function VecOfStructSource(arr::A) where A
+    el = first(arr)
+    colnames = propertynames(el)
+    coltypes = Tuple(typeof(getfield(el, f)) for f in colnames)
+
+    schema = NamedTuple{colnames, Tuple{coltypes...}}
+    VecOfStructSource{schema, A}(arr)
+end
+
+Tables.istable(::Type{<:VecOfStructSource})= true
+Tables.rowaccess(::Type{<:VecOfStructSource})= true
+
+function Tables.rows(s::VecOfStructSource{<:NamedTuple{names, T}}) where {names, T}
+    (_getrow(s.arr, i, names) for i in 1:length(s.arr))
+end

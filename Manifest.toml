@@ -95,6 +95,12 @@ git-tree-sha1 = "94d16e77dfacc59f6d6c1361866906dbb65b6f6b"
 uuid = "324d7699-5711-5eae-9e2f-1d82baa6b597"
 version = "0.5.2"
 
+[[CodecBzip2]]
+deps = ["BinDeps", "Libdl", "Test", "TranscodingStreams", "WinRPM"]
+git-tree-sha1 = "6baeaa476f6495c282829abdef0ecdca18d33bbe"
+uuid = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
+version = "0.5.0"
+
 [[CodecZlib]]
 deps = ["BinaryProvider", "Libdl", "Test", "TranscodingStreams"]
 git-tree-sha1 = "e3df104c84dfc108f0ca203fd7f5bbdc98641ae9"
@@ -215,11 +221,23 @@ git-tree-sha1 = "29cda58afbf62f35b1a094882ad6c745a47b2eaa"
 uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
 version = "0.2.4"
 
+[[FastIOBuffers]]
+deps = ["Compat"]
+git-tree-sha1 = "c150c7f2a83d8621bdaaf98756f23d594d907077"
+uuid = "6ccb8d0d-f5f8-5ae0-a392-f5aa62729a81"
+version = "0.2.0"
+
 [[Feather]]
 deps = ["Arrow", "CategoricalArrays", "DataFrames", "Dates", "FlatBuffers", "Mmap", "Random", "Tables", "Test"]
 git-tree-sha1 = "9b5a2052d63d2dd6e208bf3438af175fdd8334c1"
 uuid = "becb17da-46f6-5d3c-ad1b-1c5fe96bc73c"
 version = "0.5.1"
+
+[[FileIO]]
+deps = ["Pkg", "Random", "Test"]
+git-tree-sha1 = "c94b0787956629036fb2b20fccde9e52b89d079a"
+uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+version = "1.0.5"
 
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Test"]
@@ -289,6 +307,12 @@ version = "0.10.0"
 deps = ["LinearAlgebra", "Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
+[[IterTools]]
+deps = ["SparseArrays", "Test"]
+git-tree-sha1 = "79246285c43602384e6f1943b3554042a3712056"
+uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
+version = "1.1.1"
+
 [[IteratorInterfaceExtensions]]
 deps = ["Test"]
 git-tree-sha1 = "5484e5ede2a4137b9643f4d646e8e7b87b794415"
@@ -306,6 +330,12 @@ deps = ["Dagger", "DataValues", "Distributed", "Glob", "IndexedTables", "MemPool
 git-tree-sha1 = "c4cb07250d760ce2b6f9969e175447755feb612d"
 uuid = "a93385a2-3734-596a-9a66-3cfbb77141e6"
 version = "0.11.0"
+
+[[JuliaDBMeta]]
+deps = ["Dagger", "Distributed", "IndexedTables", "IterTools", "JuliaDB", "MacroTools", "Reexport", "Test"]
+git-tree-sha1 = "4226cd33962cadca4029e8fa1f351010b6bdb776"
+uuid = "2c06ca41-a429-545c-b8f0-5ca7dd64ba19"
+version = "0.4.1"
 
 [[LLVM]]
 deps = ["InteractiveUtils", "Libdl", "Printf", "Test", "Unicode"]
@@ -468,6 +498,12 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 deps = ["Printf"]
 uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
+[[PyCall]]
+deps = ["Compat", "Conda", "MacroTools", "Statistics", "VersionParsing"]
+git-tree-sha1 = "ce4681263f41d98b3faf6107b28284bf8b866f5f"
+uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+version = "1.18.5"
+
 [[QuadGK]]
 deps = ["DataStructures", "LinearAlgebra", "Test"]
 git-tree-sha1 = "3ce467a8e76c6030d4c3786e7d3a73442017cdc0"
@@ -511,6 +547,20 @@ deps = ["BinaryProvider", "Libdl", "Random", "Statistics", "Test"]
 git-tree-sha1 = "9a6c758cdf73036c3239b0afbea790def1dabff9"
 uuid = "79098fc4-a85e-5d69-aa6a-4863f24498fa"
 version = "0.5.0"
+
+[[RobotOS]]
+deps = ["PyCall", "Test"]
+git-tree-sha1 = "cd65ac0630c65661362bfced6ff0c7e25839bfd4"
+uuid = "22415677-39a4-5241-a37a-00beabbbdae8"
+version = "0.7.0"
+
+[[RobotOSData]]
+deps = ["CodecBzip2", "DataStructures", "Dates", "FastIOBuffers", "FileIO", "PyCall", "RobotOS", "StaticArrays", "Tables", "Tokenize", "TranscodingStreams"]
+git-tree-sha1 = "2886c031c4ae7374b286dc7476bfecc8d34bbd97"
+repo-rev = "dev"
+repo-url = "https://github.com/colinxs/RobotOSData.jl.git"
+uuid = "ec174be4-a9f3-11e8-3a81-af157eca82e9"
+version = "0.1.0"
 
 [[Rotations]]
 deps = ["LinearAlgebra", "Random", "StaticArrays", "Statistics", "Test"]
@@ -605,9 +655,15 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[TextParse]]
 deps = ["CodecZlib", "DataStructures", "Dates", "DoubleFloats", "Mmap", "Nullables", "PooledArrays", "Random", "Test", "WeakRefStrings"]
-git-tree-sha1 = "4092d42c5a4db70faf7e73ca17410630c64ffb91"
+git-tree-sha1 = "989a9b371867e8b3f6546e3c2e62e618b351b45d"
 uuid = "e0df1984-e451-5cb5-8b61-797a481e67e3"
-version = "0.7.2"
+version = "0.7.4"
+
+[[Tokenize]]
+deps = ["Printf", "Test"]
+git-tree-sha1 = "3e83f60b74911d3042d3550884ca2776386a02b8"
+uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
+version = "0.5.3"
 
 [[TranscodingStreams]]
 deps = ["Pkg", "Random", "Test"]
