@@ -62,24 +62,24 @@ end
 
 # --- Tables.jl interface for vector-of-structs
 using Tables
-_getrow(x, i, fields) = NamedTuple{fields}(Tuple(getfield(x[i], f) for f in fields))
 
-struct VecOfStructSource{NT, A<:AbstractArray}
+@inline generic_row(row, props) = NamedTuple{props}(Tuple(getproperty(row, p) for p in props))
+@inline generic_properties(row) = propertynames(row)
+
+struct Source{NT, A<:AbstractArray, P, R}
     arr::A
+    propfn::P
+    rowfn::R
 end
 
-function VecOfStructSource(arr::A) where A
+function Source(arr::A, propfn::P=generic_properties, rowfn::R=generic_row) where {A<:AbstractArray, P, R}
     el = first(arr)
-    colnames = propertynames(el)
-    coltypes = Tuple(typeof(getfield(el, f)) for f in colnames)
-
+    colnames = propfn(el)
+    coltypes = Tuple(typeof(getproperty(el, p)) for p in colnames)
     schema = NamedTuple{colnames, Tuple{coltypes...}}
-    VecOfStructSource{schema, A}(arr)
+    Source{schema, A, P, R}(arr, propfn, rowfn)
 end
 
-Tables.istable(::Type{<:VecOfStructSource})= true
-Tables.rowaccess(::Type{<:VecOfStructSource})= true
-
-function Tables.rows(s::VecOfStructSource{<:NamedTuple{names, T}}) where {names, T}
-    (_getrow(s.arr, i, names) for i in 1:length(s.arr))
-end
+Tables.istable(::Type{<:Source})= true
+Tables.rowaccess(::Type{<:Source})= true
+Tables.rows(s::Source{<:NamedTuple{props}}) where props = (s.rowfn(row, props) for row in s.arr)
