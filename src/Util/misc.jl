@@ -1,4 +1,5 @@
 using StaticArrays
+using StructArrays
 
 # TODO(cxs): document
 @inline img2grid(x, y) = y, x
@@ -47,8 +48,8 @@ end
 # subsample TODO(cxs): allow for arbitrary axis
 takeN(a::AbstractArray, n::Integer) = @inbounds (a[round(Int,i)] for i in LinRange(firstindex(a), lastindex(a), n))
 
-tuplecat(t1::Tuple, t2::Tuple, t3...) = tuplecat((t1..., t2...), t3...)
-tuplecat(t::Tuple) = t
+tuplecat(t1, t2, t3...) = tuplecat((t1..., t2...), t3...)
+tuplecat(t) = t
 
 # run func while redirecting it's stdout to /dev/null
 # works only on POSIX systems
@@ -60,26 +61,14 @@ macro squashstdout(func)
     end
 end
 
-# --- Tables.jl interface for vector-of-structs
-using Tables
-
-@inline generic_row(row, props) = NamedTuple{props}(Tuple(getproperty(row, p) for p in props))
-@inline generic_properties(row) = propertynames(row)
-
-struct Source{NT, A<:AbstractArray, P, R}
-    arr::A
-    propfn::P
-    rowfn::R
+function searchsortednearest(a, x)
+   idx = searchsortedfirst(a,x)
+   if (idx==1); return idx; end
+   if (idx>length(a)); return length(a); end
+   if (a[idx]==x); return idx; end
+   if (abs(a[idx]-x) < abs(a[idx-1]-x))
+      return idx
+   else
+      return idx-1
+   end
 end
-
-function Source(arr::A, propfn::P=generic_properties, rowfn::R=generic_row) where {A<:AbstractArray, P, R}
-    el = first(arr)
-    colnames = propfn(el)
-    coltypes = Tuple(typeof(getproperty(el, p)) for p in colnames)
-    schema = NamedTuple{colnames, Tuple{coltypes...}}
-    Source{schema, A, P, R}(arr, propfn, rowfn)
-end
-
-Tables.istable(::Type{<:Source})= true
-Tables.rowaccess(::Type{<:Source})= true
-Tables.rows(s::Source{<:NamedTuple{props}}) where props = (s.rowfn(row, props) for row in s.arr)
