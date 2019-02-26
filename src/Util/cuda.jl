@@ -1,5 +1,4 @@
 using CUDAnative
-using CuArrays
 
 macro gridstride(length, itersym, expr)
     quote
@@ -10,3 +9,4 @@ macro gridstride(length, itersym, expr)
         end
     end
 end
+export gridstride

@@ -1,5 +1,5 @@
 using CoordinateTransformations, Rotations, StaticArrays
-import CoordinateTransformations: compose
+const CT = CoordinateTransformations
 using LinearAlgebra
 import Distributions, Statistics
 
@@ -15,11 +15,13 @@ const SE3{L, T} = AffineMap{L,T} where L <: R3D where T <: T3D
 @inline project2D(t::T3D) = SVector(t[1], t[2])
 @inline project2D(r::R3D, t::T3D) = project2D(r), project2D(t)
 @inline project2D(a::SE3) = AffineMap(project2D(a.linear), project2D(a.translation))
+export project2D
 
 @inline project3D(r::R2D) = Quat(RotXYZ(0,0,r.theta))
 @inline project3D(t::T2D) = SVector(t[1], t[2], 0)
 @inline project3D(r::R2D, t::T2D) = project3D(r), project3D(t)
 @inline project3D(a::SE2) = AffineMap(project3D(a.linear), project3D(a.translation))
+export project3D
 
 struct Pose2D{T}
   affine::AffineMap{Angle2d{T}, SVector{2, T}}
@@ -41,11 +43,12 @@ struct Pose2D{T}
 end
 # TODO: varargs might be slow, benchmark
 @inline Pose2D(args...) = Pose2D{Float64}(args...) # default to Float64
+export Pose2D
 
 # TODO(cxs): add warning if composing with non-SE2 type?
-@inline compose(p::Pose2D{T}, t::AffineMap) where T = Pose2D{T}(compose(p.affine, t))
-@inline compose(t::AffineMap, p::Pose2D{T}) where T = Pose2D{T}(compose(t, p.affine))
-@inline compose(p1::Pose2D{T1}, p2::Pose2D{T2}) where {T1,T2} = Pose2D{promote_type(T1, T2)}(compose(p1.affine, p2.affine))
+@inline CT.compose(p::Pose2D{T}, t::AffineMap) where T = Pose2D{T}(compose(p.affine, t))
+@inline CT.compose(t::AffineMap, p::Pose2D{T}) where T = Pose2D{T}(compose(t, p.affine))
+@inline CT.compose(p1::Pose2D{T1}, p2::Pose2D{T2}) where {T1,T2} = Pose2D{promote_type(T1, T2)}(compose(p1.affine, p2.affine))
 
 @inline Base.inv(p::Pose2D) = Pose2D(inv(p.affine))
 @inline Base.isapprox(p::Pose2D, t::AffineMap; kwargs...) = Base.isapprox(p.affine, t; kwargs...)
@@ -90,7 +93,7 @@ function mean(poses::AbstractVector{<:Pose2D{T}}, weights::AbstractVector{<:Real
     return Pose2D{T}(Angle2d(Rbar), Tbar)
 end
 
-function mean(poses::AbstractVector{<:Pose2D{T}}) where T
+function Statistics.mean(poses::AbstractVector{<:Pose2D{T}}) where T
     Tbar = zeros(SVector{2, Float64})
     sinsum = Float64(0)
     cossum = Float64(0)
@@ -110,8 +113,7 @@ end
 #@inline Scale3D(sx, sy, sz) = Scale3D(Float64, sx, sy, sz)
 @inline Scale2D(t, s) = SMatrix{2,2,t}(s,0,0,s)
 @inline Scale2D(s) = Scale2D(Float64, s)
-
-Statistics.mean(p::AbstractVector{<:Pose2D}) = mean(p)
+export Scale2D
 
 #TODO(cxs) clean up and verify w/ test before uncommenting
 # useful 2D transforms and utils
@@ -149,6 +151,7 @@ function ReflectX(T::DataType)
   z, o = zero(T), one(T)
   SMatrix{2,2,T}(o,z,z,-o)
 end
+export ReflectX
 #
 #function ReflectY(T::DataType)
 #  z, o = zero(T), one(T)
