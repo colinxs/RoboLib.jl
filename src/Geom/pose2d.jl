@@ -6,10 +6,12 @@ import Distributions, Statistics
 const T2D = Union{SVector{2}, Translation{2}}
 const R2D = Rotation{2}
 const SE2{L, T} = AffineMap{L,T} where L <: R2D where T <: T2D
+export T2D, R2D, SE2
 
 const T3D = Union{SVector{3}, Translation{3}}
 const R3D = Rotation{3}
 const SE3{L, T} = AffineMap{L,T} where L <: R3D where T <: T3D
+export T3D, R3D, SE3
 
 @inline project2D(r::R3D) = Angle2d(RotXYZ(r).theta3)
 @inline project2D(t::T3D) = SVector(t[1], t[2])

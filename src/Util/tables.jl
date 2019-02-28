@@ -151,6 +151,14 @@ function reltime(synced; timekey=:timestamp)
 end
 export reltime
 
+# TODO inplace
+function dedup(tbl, colname)
+    c = select(tbl, colname)
+    uniqueidxs = Vector{Int}(indexin(unique(c), c))
+    tbl[uniqueidxs]
+end
+export dedup
+
 
 
 

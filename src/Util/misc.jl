@@ -41,7 +41,6 @@ end
 export binarize
 
 # force tasks/coroutines to raise exceptions
-# in main thread
 macro debugtask(ex)
   quote
     try
@@ -53,7 +52,7 @@ macro debugtask(ex)
     end
   end
 end
-export debugtask
+export @debugtask
 
 # Grab N evenly-spaced elements from an array
 # subsample TODO(cxs): allow for arbitrary axis
@@ -78,7 +77,7 @@ macro squashstdout(func)
         end
     end
 end
-export tuplecat
+export @squashstdout
 
 # find idx such that abs(a[idx] - x) <= abs(a[i] - x)
 # for 1 <= i <= length(a). Breaks ties by returniGng
@@ -110,3 +109,25 @@ export mapvalues!
 using Dates: Second
 tosecond(t::T) where T = t / convert(T, Second(1))
 export tosecond
+
+macro ifdefined(test::Symbol, expr::Expr)
+  @isdefined(test) ? esc(expr) : nothing
+end
+macro ifdefined(test::Expr, expr::Expr)
+  deepisdefined(test) ? esc(expr) : nothing
+end
+export @ifdefined
+
+macro deepisdefined(test::Expr)
+  deepisdefined(test)
+end
+function deepisdefined(test::Expr)
+  base, s = test.args
+  try
+    return isdefined(eval(base), eval(s))
+  catch
+  end
+  false
+end
+export @deepisdefined
+
