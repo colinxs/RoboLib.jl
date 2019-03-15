@@ -1,0 +1,7 @@
+name = "Autotype"
+uuid = "a7e2f8a6-410e-11e9-3474-bd7907ba782e"
+authors = ["Colin Summers <me@colinxsummers.com>"]
+version = "0.1.0"
+
+[deps]
+MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
