@@ -4,7 +4,8 @@ struct RepeatedView{D<:AbstractVector}
   RepeatedView(d::D) where D = new{D}(d, length(d))
 end
 
-@inline function Base.getindex(a::RepeatedView, i::Int)
+@inline function Base.getindex(a::RepeatedView, i::Union{Int, UnitRange{Int}})
+    println(i)
     if Base.checkbounds(Bool, a.data, i)
       return @inbounds a.data[i]
     elseif i > a.len

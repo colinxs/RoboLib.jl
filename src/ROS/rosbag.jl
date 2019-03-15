@@ -12,7 +12,6 @@ struct ROSMsg{M<:AbstractMsg}
     msg::M
     bagtime::Time
     typestr::String
-    type::DataType
 end
 
 struct ROSBag
@@ -58,15 +57,16 @@ end
 # TODO Python iterator is slow (not convert), try batch reading in python
 # then pass data
 function read_messages(b::ROSBag; kwargs...)
-    filt = Base.Iterators.filter(b.bag[:read_messages](;kwargs...)) do (_, msg, _)
-        haskey(b.typemap, msg[:_type])
+    entries = collect(b.bag[:read_messages](;kwargs...))
+    filter!(entries) do (_, msg, _)
+       haskey(b.typemap, msg[:_type])
     end
-    Base.Iterators.map(filt) do (topic, msg, t)
+    map(entries) do (topic, msg, t)
         typestr = msg[:_type]
         type = b.typemap[typestr]
         msg = convert(type, msg)
         t = convert(RobotOS.Time, t)
-        ROSMsg(topic, msg, t, typestr, type)
+        ROSMsg(topic, msg, t, typestr)
     end
 end
 

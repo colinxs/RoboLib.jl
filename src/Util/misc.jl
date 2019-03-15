@@ -1,5 +1,5 @@
-using StaticArrays
-using StructArrays
+using Interpolations # for applywin
+using Dates: Second, TimePeriod, CompoundPeriod # for tosecond
 
 # image coordinate to array indices (and vice-versa)
 @inline img2grid(x, y) = y, x
@@ -27,16 +27,17 @@ export rangebearing2point
 @inline euclidean(x0, y0, x1, y1) = sqrt((y1-y0)^2 + (x1-x0)^2)
 export euclidean
 
+# theta -> [-pi, pi]
 @inline wrap2minuspipi(theta) = mod((theta + pi), (2 * pi)) - pi
 export wrap2minuspipi
 
-# N-dim matrix to boolean mask
-function binarize(arr, test::Function=(el)->el<1.0)
-    bitarr = similar(arr, Bool)
-    @inbounds @simd for i = eachindex(arr)
-        bitarr[i] = test(arr[i])
+# N-dim array to boolean mask
+function binarize(a::AbstractArray, binfn)
+    bitarr = similar(a, Bool)
+    @inbounds @simd for i = eachindex(a)
+        bitarr[i] = binfn(a[i])
     end
-    return bitarr
+    bitarr
 end
 export binarize
 
@@ -67,6 +68,7 @@ function tuplecat(t1::NamedTuple, t2::NamedTuple, t3::NamedTuple...)
 end
 tuplecat(t) = t
 export tuplecat
+# ---
 
 # run func while redirecting it's stdout to /dev/null
 # works only on POSIX systems
@@ -96,20 +98,22 @@ end
 export searchsortednearest
 
 # apply f to the values of d
-function mapvalues!(f, d::AbstractDict)
-    for (k,v) in d
-        d[k] = f(v)
-    end
-    d
-end
+mapvalues!(f, d::AbstractDict) = (for (k,v) in d d[k] = f(v) end; d)
 export mapvalues!
 
 # convert any period to seconds
 # TODO make work for other periods
-using Dates: Second
-tosecond(t::T) where T = t / convert(T, Second(1))
-export tosecond
+function converttime(totype::Type{<:TimePeriod}, t::T) where T<:TimePeriod
+  factor = convert(totype, Second(1)).value / convert(T, Second(1)).value
+  t.value * factor
+end
+function converttime(totype::Type{<:TimePeriod}, t::T) where T<:CompoundPeriod
+  sum(converttime(totype, p) for p in t.periods)
+end
+tosecond(t) = converttime(Second, t)
+export tosecond, converttime
 
+# do "expr" if test is defined
 macro ifdefined(test::Symbol, expr::Expr)
   @isdefined(test) ? esc(expr) : nothing
 end
@@ -117,7 +121,9 @@ macro ifdefined(test::Expr, expr::Expr)
   deepisdefined(test) ? esc(expr) : nothing
 end
 export @ifdefined
+# ---
 
+"Check if a nested module/symbol (i.e. Base.Iterators.Take) is defined"
 macro deepisdefined(test::Expr)
   deepisdefined(test)
 end
@@ -131,3 +137,29 @@ function deepisdefined(test::Expr)
 end
 export @deepisdefined
 
+
+"""
+    applywin(f, datas...; hwin=0, extrapmode=Reflect())
+
+Apply `f` to `d[i-hwin:i+hwin]` for each index of `d`
+, for each `d` in `datas`. Requires all `d` in `datas` to have
+the same length.
+
+See Interpolations.jl for valid options for extrapmode.
+"""
+function applywin(f, datas::AbstractArray...; hwin::Integer=0, extrapmode=Reflect())
+  l = unique(length.(datas))
+  @assert length(l) == 1
+  l = first(l)
+  _applywin(f, l, extrapmode, hwin, datas...)
+end
+_slicewin(i, hwin, datas...) = Tuple(d(i-hwin:i+hwin) for d in datas)
+function _applywin(f, l, extrapmode, hwin, datas...)
+  exdatas = Tuple(extrapolate(interpolate(x, BSpline(Constant())), extrapmode) for x in datas)
+  [f(_slicewin(i, hwin, exdatas...)...) for i in 1:l]
+end
+export applywin
+
+"Compute the pair-wise difference between adject elements in `x`"
+delta(x) = x[2:end] .- x[1:end-1]
+export delta

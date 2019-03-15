@@ -1,5 +1,5 @@
 using Rotations: Quat
-using Dates: Nanosecond, unix2datetime
+using Dates: Nanosecond, Second, unix2datetime
 
 using RoboLib.Geom: project2D
 
@@ -8,3 +8,6 @@ export rosquat2theta
 
 robotostime2datetime(t) = unix2datetime(t.secs) + Nanosecond(t.nsecs)
 export robotostime2datetime
+
+robotosduration2time(t) = Second(t.secs) + Nanosecond(t.nsecs)
+export robotosduration2time

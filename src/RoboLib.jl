@@ -1,4 +1,9 @@
 module RoboLib
+using Requires
+
+function __init__()
+    push!(LOAD_PATH, joinpath(@__DIR__, "../projects"))
+end
 
 include("Compat.jl")
 include("Util/Util.jl")
