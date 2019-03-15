@@ -1,6 +1,5 @@
 using Rotations: Quat
 using Dates: Nanosecond, Second, unix2datetime
-
 using RoboLib.Geom: project2D
 
 rosquat2theta(rq) = project2D(Quat(rq.w, rq.x, rq.y, rq.z)).theta
