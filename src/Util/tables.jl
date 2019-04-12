@@ -69,6 +69,7 @@ function join_asof(tables::IndexedTable...; key::Symbol=:time, how::Symbol=:oute
 
     tables = [tables...]
 
+    # TODO(cxs) err if how != inner or outer
     sort!(tables, by=(el)->length(el), rev=(how===:outer))
 
     # TODO: make copy?

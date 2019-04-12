@@ -1,7 +1,7 @@
 module Util
 using Requires
 
-
+# TODO add CuArrays to init
 include("misc.jl")
 include("tables.jl")
 function __init__()
