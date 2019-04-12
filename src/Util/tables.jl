@@ -59,7 +59,7 @@ Tables.columns(s::AbstractDict) = NamedTuple{Tuple(keys(s))}(Tuple(values(s)))
 # -- Join multiple tables by finding the best match along a common column (similar to Panda's merge_asof)
 
 # TODO: add tests
-function join_asof(tables::IndexedTable...; key::Symbol=:time, how::Symbol=:outer, presorted::Bool=true)
+function join_asof(tables::IndexedTable...; key::Symbol=:time, how::Symbol=:outer, presorted::Bool=false)
     # TODO wrap in debug
     for tbl in tables
         if !(key in colnames(tbl))
