@@ -5,14 +5,14 @@ using Tables
 
 using RoboLib.Util: VOSSource
 
-export ROSMsg, ROSBag, read_messages, read_messages_dict
-
-struct ROSMsg{M<:AbstractMsg}
+struct ROSMsg{M}
     topic::String
     msg::M
     bagtime::Time
     typestr::String
 end
+const Msg = ROSMsg
+export ROSMsg, Msg
 
 struct ROSBag
     bag::PyObject
@@ -28,9 +28,24 @@ struct ROSBag
         new(bag, typemap, typeinfo, topicinfo, name)
     end
 end
+export ROSBag
 
 # TODO: cache
 Base.getindex(b::ROSBag, t::String) = read_messages_dict(b, topics=t)[t]
+
+struct Bag
+    msgs::Vector{ROSMsg}
+    msgsdict::Dict{String, Vector{ROSMsg}}
+    typeinfo::Dict{String, String}
+    topicinfo::Dict{String, Tuple{String, Int64, Int64, Union{Float64, Nothing}}}
+    bagname::String
+end
+function Bag(rosbag::ROSBag)
+    msgs = read_messages(rosbag)
+    msgsdict = read_messages_dict(rosbag) # TODO: remove? view?
+    Bag(msgs, msgsdict, rosbag.typeinfo, rosbag.topicinfo, rosbag.bagname)
+end
+export Bag
 
 _parsetypestr(t) = convert.(String, split(t, "/"))
 
@@ -57,6 +72,7 @@ end
 # TODO Python iterator is slow (not convert), try batch reading in python
 # then pass data
 function read_messages(b::ROSBag; kwargs...)
+    # TODO: faster to collect first?
     entries = collect(b.bag[:read_messages](;kwargs...))
     filter!(entries) do (_, msg, _)
        haskey(b.typemap, msg[:_type])

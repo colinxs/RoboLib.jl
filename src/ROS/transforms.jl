@@ -1,6 +1,6 @@
 using Rotations: Quat
 using RoboLib.Util: tuplecat, transform
-using RoboLib.ROS: robotosduration2time, robotostime2datetime
+using RoboLib.ROS: robotostime2datetime, robotosduration2time, ROSBag
 using StaticArrays: SVector
 import RobotOS
 
@@ -55,7 +55,6 @@ transform_empty(m) = nothing
 TRANSFORM_MAP["std_msgs/Empty"] = transform_empty
 
 # Recursively transform a message
-transform_msg(m) = transform_msg(m, nothing)
 function transform_msg(m, propname)
     if m === nothing
         return nothing
@@ -76,7 +75,7 @@ function transform_msg(m, propname)
             typestr = RobotOS._typerepr(typeof(m))
 
             if haskey(TRANSFORM_MAP, typestr)
-                # A type we know how to handle
+                #  type we know how to handle
                 return TRANSFORM_MAP[typestr](m)
             else
                 # Compound ROS msg
@@ -93,4 +92,12 @@ function transform_msg(m, propname)
         end
     end
 end
+function transform_msg(m::ROSMsg)
+    msg = transform_msg(m.msg)
+    bagtime = transform_msg(m.bagtime)
+    ROSMsg(m.topic, msg, bagtime, m.typestr)
+end
+transform_msg(m) = transform_msg(m, nothing)
+
+
 # -- end rostype2jltype transformations
