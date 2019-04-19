@@ -1,6 +1,6 @@
 using Test
 using JuliaDB
-using RoboLib.Util
+using RoboLib
 using Dates
 
 function test_join_asof_basic()

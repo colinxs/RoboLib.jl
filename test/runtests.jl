@@ -1,2 +1,2 @@
 
-include("Util/test_tables.jl")
+include("test_tables.jl")
