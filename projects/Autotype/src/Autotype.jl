@@ -1,88 +1,68 @@
 module Autotype
 
 using MacroTools: splitstructdef
-using InteractiveUtils: subtypes
 
 export @autotype
 
+# TODO: handle type paramters not used with fields
+# TODO: handle inner constructors
+# TODO: handle docstrings
+
 macro autotype(typedef)
-    return esc(autotype(typedef))
+    esc(autotype(typedef, __module__))
 end
 
-macro autotype(s::Symbol, typedef)
-    println("YAHOO")
-    return esc(autotype(typedef, s))
-end
-
-function autotype(typedef, s=nothing)
-    sp = make_parametric(typedef, s)
+function autotype(typedef, mod)
+    sp = make_parametric(typedef, mod)
     new_typ = :($(sp[:name]){$(sp[:params]...)})
     type_def =
     :($(Expr(:struct,
              sp[:mutable],
              Expr(:<:, new_typ, sp[:supertype]),
              Expr(:block, sp[:fields]...))))
-                  #inner_constr,
-                  #((parametric &&
-                  #  all_type_vars_present(type_vars, [args; kwargs]))
-                  # ? [straight_constr] : [])...))))
 end
 
-#TODO pass module
-function _typetest(parent_type)
-    parent_type == Any || isdefined(@__MODULE__, parent_type) && length(subtypes(eval(parent_type))) != 0
-end
+_hasparam(t::Symbol, x) = !isnothing(findfirst(p->p===t || isa(p, Expr) && p.args[1] === t, x))
 
-function make_parametric(typedef, s)
+function make_parametric(typedef, mod)
     sp = splitstructdef(typedef)
-    type_counter = 1
     new_fields = []
-    println(typeof(s))
-    @show s
-    function new_type(parent)
-        if !(s === nothing)
-            new_ty = Symbol(s, type_counter)
-            type_counter += 1
+    for (name, type) in sp[:fields]
+        if type == Any
+            # undeclared type (i.e. field "foo")
+            newtype = gensym()
+            push!(new_fields, :($name::$newtype))
+            push!(sp[:params], :($newtype))
+        elseif isdefined(mod, type)
+            if isconcretetype(mod.eval(type))
+                # declared concrete type (i.e. field "foo::Int")
+                push!(new_fields, :($name::$type))
+            else
+                # declared abstract type (i.e. field "foo::Integer")
+                newtype = gensym()
+                push!(new_fields, :($name::$newtype))
+                push!(sp[:params], :($newtype <: $type))
+            end
         else
-            new_ty = gensym()
-        end
-        new_ty
-    end
-    function add_type(name, parent_type)
-            # Case 1: Type parameter already specified, type is an existing type, and type is not concrete
-        else
-            # Case 2: New type parameter already specified or is concrete
-            type = parent_type
-            param = parent_type
-        end
-        type, param
-    end
-    new_fields = []
-    new_params = []
-    for (name, parent_type) in sp[:fields]
-        if _typetest(parent_type)
-            type = new_type(parent_type)
-            param = :($type <: $parent_type)
-        type, param = add_type(name, parent_type)
-        push!(new_fields, :($name::$type))
-        if !(param in new_params)
-            push!(new_params, param)
+            # declared paramterized type (i.e. field "foo::T")
+            push!(new_fields, :($name::$type))
+            if !_hasparam(type, sp[:params])
+                @warn("In definition of $(sp[:name]): declared type \"$type\" for field \"$name\" does not exist, adding it as a parameter")
+                # As a convenience we add the missing type parameter, allowing definitions like:
+                # @autotype struct Bar
+                #   foo::T
+                # end
+                # equivalent to
+                # struct Bar{T}
+                #   foo::T
+                # end
+                push!(sp[:params], type)
+            end
         end
     end
     sp[:fields] = new_fields
-    sp[:params] = new_params
     sp
-
-
-
-    #if type_counter == 1
-    #    # Has to special-case the "no type parameters" case because of
-    #    # https://github.com/JuliaLang/julia/issues/20878
-    #    return (typ, typ_def, args, kwargs)
-    #else
-    #    return (new_typ, :($new_typ($(typed_args...); $(typed_kwargs...))),
-    #            typed_args, typed_kwargs)
-    #end
 end
 
-end
+end # module
+
